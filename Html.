@@ -1,0 +1,957 @@
+<title>Holding the Door Open</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap">
+
+<style>
+  :root{
+    --ground:#FAF5F2;
+    --ground-2:#F3EBE6;
+    --ink:#3A2634;
+    --ink-soft:#5A4256;
+    --muted:#7C6577;
+    --faint:#A08EA0;
+
+    --plum:#7A4A82;
+    --plum-deep:#5C3364;
+    --rose:#B4666E;
+    --apricot:#CE8F55;
+    --sage:#6E8F7D;
+    --lavender:#C7B0D2;
+
+    --g-dawn:linear-gradient(135deg,#7A4A82 0%,#B4666E 55%,#CE8F55 100%);
+    --g-dusk:linear-gradient(135deg,#5C3364 0%,#8A5A80 100%);
+    --g-warm:linear-gradient(135deg,#B4666E 0%,#D9A765 100%);
+    --g-calm:linear-gradient(135deg,#6E8F7D 0%,#8FA98C 100%);
+
+    --glass:rgba(255,255,255,.58);
+    --glass-strong:rgba(255,255,255,.76);
+    --glass-edge:rgba(255,255,255,.82);
+    --glass-line:rgba(122,74,130,.16);
+
+    --shadow-data:0 1px 3px rgba(58,38,52,.07), 0 12px 28px -12px rgba(122,74,130,.30), 0 28px 54px -30px rgba(180,102,110,.28);
+    --shadow-card:0 1px 2px rgba(58,38,52,.05), 0 14px 34px -20px rgba(92,51,100,.30);
+
+    --font:"Inter", "Helvetica Neue", Arial, sans-serif;
+
+    --mote-a:rgba(214,158,96,.46);
+    --mote-b:rgba(180,102,110,.36);
+    --mote-c:rgba(140,96,160,.34);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#1B1219;
+      --ground-2:#241823;
+      --ink:#F6EEF2;
+      --ink-soft:#E0CFDA;
+      --muted:#B49FAF;
+      --faint:#8A7484;
+
+      --plum:#C9A4D2;
+      --plum-deep:#B089BC;
+      --rose:#E0969E;
+      --apricot:#E5B078;
+      --sage:#9CBCA8;
+      --lavender:#8E6C9C;
+
+      --g-dawn:linear-gradient(135deg,#B089BC 0%,#DA8F98 55%,#E5B078 100%);
+      --g-dusk:linear-gradient(135deg,#8E6C9C 0%,#C48CAE 100%);
+      --g-warm:linear-gradient(135deg,#DA8F98 0%,#E8BC84 100%);
+      --g-calm:linear-gradient(135deg,#7FA890 0%,#9CBCA8 100%);
+
+      --glass:rgba(255,255,255,.065);
+      --glass-strong:rgba(255,255,255,.11);
+      --glass-edge:rgba(255,255,255,.15);
+      --glass-line:rgba(201,164,210,.22);
+
+      --shadow-data:0 1px 3px rgba(0,0,0,.38), 0 12px 28px -12px rgba(0,0,0,.52), 0 28px 54px -30px rgba(0,0,0,.60);
+      --shadow-card:0 1px 2px rgba(0,0,0,.34), 0 14px 34px -20px rgba(0,0,0,.50);
+
+      --mote-a:rgba(229,176,120,.40);
+      --mote-b:rgba(218,143,152,.34);
+      --mote-c:rgba(176,137,188,.36);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#1B1219;
+    --ground-2:#241823;
+    --ink:#F6EEF2;
+    --ink-soft:#E0CFDA;
+    --muted:#B49FAF;
+    --faint:#8A7484;
+    --plum:#C9A4D2;
+    --plum-deep:#B089BC;
+    --rose:#E0969E;
+    --apricot:#E5B078;
+    --sage:#9CBCA8;
+    --lavender:#8E6C9C;
+    --g-dawn:linear-gradient(135deg,#B089BC 0%,#DA8F98 55%,#E5B078 100%);
+    --g-dusk:linear-gradient(135deg,#8E6C9C 0%,#C48CAE 100%);
+    --g-warm:linear-gradient(135deg,#DA8F98 0%,#E8BC84 100%);
+    --g-calm:linear-gradient(135deg,#7FA890 0%,#9CBCA8 100%);
+    --glass:rgba(255,255,255,.065);
+    --glass-strong:rgba(255,255,255,.11);
+    --glass-edge:rgba(255,255,255,.15);
+    --glass-line:rgba(201,164,210,.22);
+    --shadow-data:0 1px 3px rgba(0,0,0,.38), 0 12px 28px -12px rgba(0,0,0,.52), 0 28px 54px -30px rgba(0,0,0,.60);
+    --shadow-card:0 1px 2px rgba(0,0,0,.34), 0 14px 34px -20px rgba(0,0,0,.50);
+    --mote-a:rgba(229,176,120,.40);
+    --mote-b:rgba(218,143,152,.34);
+    --mote-c:rgba(176,137,188,.36);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--font);
+    font-size:16.5px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  #vigil{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+  .page{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding-inline:20px;}
+
+  h1,h2,h3,h4{margin:0;font-weight:600;text-wrap:balance;letter-spacing:-.018em;}
+  p{margin:0 0 1em;}
+  p:last-child{margin-bottom:0;}
+
+  .grad-text{
+    background:var(--g-dawn);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .glass{
+    background:var(--glass);
+    backdrop-filter:blur(18px) saturate(135%);
+    -webkit-backdrop-filter:blur(18px) saturate(135%);
+    border:1px solid var(--glass-edge);
+    border-radius:18px;
+    box-shadow:var(--shadow-card);
+    position:relative;
+    overflow:hidden;
+  }
+  .glass::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+    opacity:.6;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--plum);
+    margin-bottom:14px;
+  }
+  .eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--g-warm);
+    box-shadow:0 0 10px 1px rgba(206,143,85,.55);
+  }
+
+  /* ================= HERO ================= */
+  .hero{padding-block:62px 56px;text-align:center;}
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:8px 17px;
+    border-radius:999px;
+    background:var(--glass-strong);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border:1px solid var(--glass-edge);
+    font-size:12.5px;
+    font-weight:500;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
+    box-shadow:var(--shadow-card);
+    margin-bottom:26px;
+  }
+  .hero h1{
+    font-size:clamp(37px,8vw,70px);
+    line-height:1.06;
+    font-weight:600;
+    letter-spacing:-.03em;
+    max-width:15ch;
+    margin:0 auto 20px;
+  }
+  .hero .sub{
+    max-width:54ch;
+    margin:0 auto 28px;
+    font-size:18px;
+    color:var(--ink-soft);
+  }
+  .idcard{
+    display:inline-flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:12px 22px;
+    padding:15px 26px;
+    border-radius:16px;
+  }
+  .idcard .nm{font-size:18.5px;font-weight:600;color:var(--ink);}
+  .idcard .sep{width:1px;height:19px;background:var(--glass-line);}
+  .idcard .mt{font-size:13.5px;color:var(--muted);font-weight:500;}
+
+  /* ================= SECTIONS ================= */
+  section{padding-block:46px;}
+  .sec-head{max-width:64ch;margin-bottom:30px;}
+  .sec-head h2{
+    font-size:clamp(25px,4.8vw,38px);
+    line-height:1.18;
+    font-weight:600;
+    letter-spacing:-.026em;
+    margin-bottom:14px;
+  }
+  .sec-head p{font-size:17.5px;color:var(--ink-soft);margin:0;}
+
+  .prose{max-width:64ch;color:var(--ink-soft);font-size:17px;}
+  .prose strong{color:var(--ink);font-weight:600;}
+
+  /* ================= NOT X / IT'S Y ================= */
+  .pivot{padding:38px 34px;border-radius:24px;text-align:center;}
+  .pivot .line{
+    font-size:clamp(22px,4.4vw,36px);
+    line-height:1.28;
+    font-weight:600;
+    letter-spacing:-.028em;
+    max-width:22ch;
+    margin:0 auto;
+  }
+  .pivot .line .no{
+    color:var(--faint);
+    text-decoration:line-through;
+    text-decoration-thickness:2px;
+    text-decoration-color:var(--rose);
+  }
+  .pivot .note{margin:18px auto 0;max-width:50ch;font-size:15.5px;color:var(--muted);}
+
+  /* ================= BENTO ================= */
+  .bento{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;}
+  .cell{
+    padding:24px;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    min-height:152px;
+  }
+  .cell.wide{grid-column:span 2;}
+  .cell.dawn{background:var(--g-dawn);border:none;box-shadow:var(--shadow-data);color:#fff;}
+  .cell.dusk{background:var(--g-dusk);border:none;box-shadow:var(--shadow-data);color:#fff;}
+  .cell.dawn::before,.cell.dusk::before{display:none;}
+  .cell .ico{
+    width:34px;height:34px;
+    border-radius:11px;
+    display:grid;place-items:center;
+    background:var(--glass-strong);
+    border:1px solid var(--glass-edge);
+    margin-bottom:auto;
+    color:var(--plum);
+    flex:none;
+  }
+  .cell.dawn .ico,.cell.dusk .ico{
+    background:rgba(255,255,255,.20);
+    border-color:rgba(255,255,255,.34);
+    color:#fff;
+  }
+  .cell .big{
+    font-size:clamp(33px,5.6vw,50px);
+    line-height:1;
+    font-weight:600;
+    letter-spacing:-.04em;
+    font-variant-numeric:tabular-nums;
+    margin-top:18px;
+    text-shadow:0 2px 12px rgba(58,38,52,.16);
+  }
+  .cell .big small{font-size:.45em;font-weight:500;opacity:.74;}
+  .cell:not(.dawn):not(.dusk) .big{
+    background:var(--g-dawn);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:none;
+  }
+  .cell .cap{font-size:13.5px;line-height:1.5;color:var(--muted);margin-top:10px;font-weight:500;}
+  .cell.dawn .cap,.cell.dusk .cap{color:rgba(255,255,255,.93);}
+
+  /* ================= OLD / NEW ================= */
+  .models{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;}
+  .model{padding:28px;border-radius:20px;}
+  .model.new{
+    border:1px solid transparent;
+    background:
+      linear-gradient(var(--ground),var(--ground)) padding-box,
+      var(--g-dawn) border-box;
+    box-shadow:var(--shadow-data);
+  }
+  .model h3{
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .model.old h3{color:var(--faint);}
+  .model.new h3{background:var(--g-dawn);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .model .tl{font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:18px;color:var(--ink);}
+  .model ul{list-style:none;margin:0;padding:0;display:grid;gap:13px;}
+  .model li{
+    display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;
+    font-size:15.5px;line-height:1.55;
+  }
+  .model.old li{color:var(--muted);}
+  .model.new li{color:var(--ink-soft);}
+  .model li svg{margin-top:3px;flex:none;}
+  .model.old li svg{color:var(--faint);}
+  .model.new li svg{color:var(--sage);}
+  .arrowbox{
+    align-self:center;
+    display:grid;place-items:center;
+    width:48px;height:48px;
+    border-radius:50%;
+    background:var(--g-dawn);
+    color:#fff;
+    box-shadow:var(--shadow-data);
+    flex:none;
+  }
+
+  /* ================= FEATURE CARDS ================= */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .feature{padding:28px 24px;border-radius:20px;}
+  .feature .fico{
+    width:46px;height:46px;
+    border-radius:14px;
+    display:grid;place-items:center;
+    background:var(--g-dawn);
+    color:#fff;
+    box-shadow:var(--shadow-data);
+    margin-bottom:18px;
+  }
+  .feature:nth-child(2) .fico{background:var(--g-dusk);}
+  .feature:nth-child(3) .fico{background:var(--g-calm);}
+  .feature h3{font-size:18.5px;font-weight:600;margin-bottom:10px;letter-spacing:-.018em;}
+  .feature p{font-size:15.5px;line-height:1.62;color:var(--muted);margin:0;}
+
+  /* ================= CHECK LIST ================= */
+  .checks{
+    list-style:none;margin:0 0 4px;padding:0;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+  }
+  .checks li{
+    display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;
+    padding:16px 18px;border-radius:15px;
+    font-size:15.5px;line-height:1.52;color:var(--ink-soft);
+  }
+  .checks li b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px;}
+  .checks li .ck{
+    width:24px;height:24px;border-radius:50%;
+    background:var(--g-calm);
+    color:#fff;
+    display:grid;place-items:center;
+    flex:none;margin-top:2px;
+    box-shadow:0 4px 11px -4px rgba(110,143,125,.75);
+  }
+
+  /* ================= SCOREBOARD ================= */
+  .board{padding:26px;border-radius:20px;margin-top:20px;}
+  .brow{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;
+    padding-block:13px;border-bottom:1px solid var(--glass-line);
+  }
+  .brow:last-of-type{border-bottom:none;}
+  .brow .lbl{font-size:15.5px;color:var(--ink-soft);font-weight:500;}
+  .brow .vals{display:flex;align-items:center;gap:11px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .brow .from{font-size:14.5px;color:var(--faint);font-weight:500;}
+  .brow .to{
+    font-size:14.5px;font-weight:600;
+    padding:5px 13px;border-radius:999px;
+    background:var(--g-dawn);color:#fff;
+    box-shadow:0 5px 14px -5px rgba(122,74,130,.7);
+  }
+  .fineprint{margin-top:16px;font-size:13px;line-height:1.6;color:var(--faint);max-width:56ch;}
+
+  /* ================= CLOSE ================= */
+  .close{padding:38px 34px;border-radius:24px;max-width:66ch;margin-inline:auto;text-align:center;}
+  .close p{font-size:17px;color:var(--ink-soft);}
+  .close strong{color:var(--ink);font-weight:600;}
+  .close{margin-bottom:46px;}
+
+  @media (max-width:900px){
+    .bento{grid-template-columns:repeat(2,1fr);}
+    .features{grid-template-columns:1fr;}
+    .models{grid-template-columns:1fr;}
+    .arrowbox{transform:rotate(90deg);justify-self:center;}
+  }
+  @media (max-width:620px){
+    body{font-size:16px;}
+    .bento{grid-template-columns:1fr;}
+    .cell.wide{grid-column:span 1;}
+    .checks{grid-template-columns:1fr;}
+    .pivot,.close{padding:28px 20px;}
+    .model,.board{padding:22px 18px;}
+    .brow{grid-template-columns:1fr;gap:8px;}
+    section{padding-block:38px;}
+  }
+
+  /* ================= REVEAL TRANSITIONS ================= */
+  /* Each section has its own motion. These rules apply only once JS
+     marks the root, so the page is fully visible if scripting never runs. */
+  [data-rv="on"] .rv{
+    opacity:0;
+    transition-delay:var(--d,0ms);
+    transition-timing-function:cubic-bezier(.22,.72,.3,1);
+    transition-property:opacity,transform,filter,clip-path;
+    transition-duration:1.15s;
+  }
+  [data-rv="on"] .rv.in{
+    opacity:1;
+    transform:none;
+    filter:none;
+    clip-path:inset(0 0 0 0);
+  }
+  /* Once a part has played, its finished state is locked in: no
+     transition remains, so it can never animate a second time. */
+  [data-rv="on"] .rv.done{
+    opacity:1 !important;
+    transform:none !important;
+    filter:none !important;
+    clip-path:none !important;
+    transition:none !important;
+    will-change:auto;
+  }
+  [data-rv="on"] .checks li.done .ck{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+  [data-rv="on"] .pivot.done .no::after{
+    transform:scaleX(1) !important;
+    transition:none !important;
+  }
+
+  /* HERO: light coming into focus */
+  [data-rv="on"] .rv-focusin{transform:scale(.965);filter:blur(12px);transition-duration:1.6s;}
+  [data-rv="on"] .rv-badge{transform:translateY(-10px) scale(.82);transition-duration:1.05s;}
+  [data-rv="on"] .rv-card{transform:translateY(18px) scale(.97);transition-duration:1.35s;}
+
+  /* MISSION: a door swinging open on its hinge */
+  [data-rv="on"] .rv-door{
+    transform:perspective(1100px) rotateY(-24deg) translateX(-16px);
+    transform-origin:left center;
+    transition-duration:1.55s;
+  }
+
+  /* PIVOT: the correction settles, then the strike is drawn */
+  [data-rv="on"] .rv-settle{transform:scale(.93) rotate(-.6deg);transition-duration:1.3s;}
+  [data-rv="on"] .pivot .no{text-decoration:none;position:relative;}
+  [data-rv="on"] .pivot .no::after{
+    content:"";
+    position:absolute;
+    left:-.04em;right:-.04em;
+    top:52%;
+    height:2px;
+    background:var(--rose);
+    transform:scaleX(0);
+    transform-origin:left center;
+    transition:transform .85s cubic-bezier(.5,0,.2,1) 1.05s;
+  }
+  [data-rv="on"] .pivot.in .no::after{transform:scaleX(1);}
+
+  /* BASELINE: figures resolving out of blur, in reading order */
+  [data-rv="on"] .rv-resolve{transform:scale(.93);filter:blur(8px);transition-duration:1.25s;}
+  [data-rv="on"] .rv-drop{transform:translateY(-18px);transition-duration:1.05s;}
+
+  /* THE SHIFT: the two models close in from opposite sides */
+  [data-rv="on"] .rv-left{transform:translateX(-52px);transition-duration:1.45s;}
+  [data-rv="on"] .rv-right{transform:translateX(52px);transition-duration:1.45s;}
+  [data-rv="on"] .rv-pop{transform:scale(.55);transition-duration:.85s;transition-timing-function:cubic-bezier(.34,1.42,.64,1);}
+
+  /* HABITS: cards dealt face up */
+  [data-rv="on"] .rv-deal{
+    transform:perspective(900px) rotateX(20deg) translateY(28px);
+    transform-origin:bottom center;
+    transition-duration:1.25s;
+  }
+  [data-rv="on"] .rv-slidein{transform:translateX(-32px);transition-duration:1.2s;}
+
+  /* HANDOVER: each row slides across, then its check stamps on */
+  [data-rv="on"] .rv-row{transform:translateX(-28px);transition-duration:1.05s;}
+  [data-rv="on"] .checks li .ck{
+    transform:scale(.25);
+    opacity:0;
+    transition:transform .7s cubic-bezier(.34,1.5,.64,1), opacity .5s ease;
+    transition-delay:calc(var(--d,0ms) + 560ms);
+  }
+  [data-rv="on"] .checks li.in .ck{transform:none;opacity:1;}
+
+  /* SCOREBOARD: each row wipes open left to right */
+  [data-rv="on"] .rv-wipe{clip-path:inset(0 100% 0 0);transition-duration:1.15s;}
+  [data-rv="on"] .rv-quiet{transition-duration:1.2s;}
+
+  /* LESSONS: realisations coming clear */
+  [data-rv="on"] .rv-clear{filter:blur(10px);transform:translateY(14px);transition-duration:1.5s;}
+
+  /* CLOSE: the slowest, a breath out */
+  [data-rv="on"] .rv-breathe{transform:translateY(28px) scale(.975);transition-duration:1.95s;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+    [data-rv="on"] .rv{opacity:1 !important;transform:none !important;filter:none !important;clip-path:none !important;}
+    [data-rv="on"] .checks li .ck{opacity:1 !important;transform:none !important;}
+    [data-rv="on"] .pivot .no::after{transform:scaleX(1) !important;}
+  }
+</style>
+
+<canvas id="vigil" aria-hidden="true"></canvas>
+
+<div class="page">
+
+  <!-- ================= HERO ================= -->
+  <header class="hero">
+    <span class="badge glass">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"/></svg>
+      Internship Portfolio &nbsp;&middot;&nbsp; Hope&rsquo;s Door NY
+    </span>
+    <h1>Holding the <span class="grad-text">Door</span> Open</h1>
+    <p class="sub">Four months rebuilding how a domestic violence nonprofit gets found, followed, and supported. 🕯️</p>
+    <div class="idcard glass">
+      <span class="nm">Jason Lin</span>
+      <span class="sep"></span>
+      <span class="mt">Digital Marketing Intern</span>
+      <span class="sep"></span>
+      <span class="mt">June to September 2026</span>
+    </div>
+  </header>
+
+  <!-- ================= MISSION ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow"><span class="dot"></span>🏡 The Mission</span>
+      <h2>Make sure people can <span class="grad-text">find the door</span></h2>
+      <p>Hope&rsquo;s Door gives survivors of domestic violence a way out: a 24/7 hotline, emergency shelter, counseling, and legal advocacy. All of it free.</p>
+    </div>
+    <p class="prose">I was asked to audit the organization&rsquo;s LinkedIn presence and rebuild the strategy, so the door reaches <strong>both</strong> audiences at once. The survivors who need to know it exists, and the businesses who can help hold it open.</p>
+  </section>
+
+  <!-- ================= PIVOT ================= -->
+  <section>
+    <div class="pivot glass">
+      <p class="line">It&rsquo;s not a <span class="no">reach</span> problem.<br>It&rsquo;s a <span class="grad-text">conversation</span> problem.</p>
+      <p class="note">The audience was already the right audience: local, senior, working in law, healthcare, and social services. They were listening. Nobody was talking back.</p>
+    </div>
+  </section>
+
+  <!-- ================= BASELINE BENTO ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow"><span class="dot"></span>🔎 Where I Started</span>
+      <h2>Nobody had numbers, so I built the baseline first</h2>
+      <p>Twelve months of analytics. All 64 posts, read end to end. The organization&rsquo;s first clear picture of what actually earns reach.</p>
+    </div>
+
+    <div class="bento">
+      <div class="cell dawn wide">
+        <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></div>
+        <div class="big">64</div>
+        <div class="cap">posts audited across a full twelve month window</div>
+      </div>
+      <div class="cell glass">
+        <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+        <div class="big">865</div>
+        <div class="cap">followers at the baseline</div>
+      </div>
+      <div class="cell glass">
+        <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div>
+        <div class="big">0.64</div>
+        <div class="cap">comments per post, the number that defined the problem</div>
+      </div>
+      <div class="cell dusk wide">
+        <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <div class="big">15<small>&thinsp;/&thinsp;64</small></div>
+        <div class="cap">posts that received any comment at all</div>
+      </div>
+      <div class="cell glass">
+        <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></div>
+        <div class="big">4</div>
+        <div class="cap">people listing Hope&rsquo;s Door as their employer</div>
+      </div>
+      <div class="cell glass">
+        <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="big">2<small>&thinsp;/&thinsp;5</small></div>
+        <div class="cap">engagement score, against 3.6 for credibility</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= OLD vs NEW ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow"><span class="dot"></span>🤝 The Shift</span>
+      <h2>From broadcasting <span class="grad-text">to belonging</span></h2>
+      <p>Everything I found pointed the same direction. Here is the model I inherited, and the one I left behind.</p>
+    </div>
+
+    <div class="models">
+      <div class="model old glass">
+        <h3>The Old Model</h3>
+        <div class="tl">Post and walk away</div>
+        <ul>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Event announcements published once, then left alone</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Partners and sponsors thanked in plain text, never tagged</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Posting in bursts around events, quiet in between</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Impressions treated as the measure of success</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>The page carrying the message alone</span></li>
+        </ul>
+      </div>
+
+      <div class="arrowbox">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+
+      <div class="model new glass">
+        <h3>The New Model</h3>
+        <div class="tl">Start conversations</div>
+        <ul>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Events run as multi post campaigns with a build and a recap</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Every partner tagged by name, so their network sees it too</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>A steady Tuesday to Thursday rhythm, batched monthly</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Comments, reposts, and referrals tracked against a baseline</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Staff and board amplifying from their own profiles</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3 FEATURES ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow"><span class="dot"></span>🌱 What Drove It</span>
+      <h2>Three habits explained <span class="grad-text">almost the whole gap</span></h2>
+      <p>I benchmarked Hope&rsquo;s Door against peers who consistently outperform us. The difference came down to three repeatable things, none of which cost money.</p>
+    </div>
+
+    <div class="features">
+      <article class="feature glass">
+        <div class="fico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+        <h3>Name your people</h3>
+        <p>Tag the sponsor, the honoree, the volunteer, the partner firm. When you name someone, their entire network sees it. This is borrowed reach you could never buy.</p>
+      </article>
+      <article class="feature glass">
+        <div class="fico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div>
+        <h3>Build the arc</h3>
+        <p>A gala is not one post. Peers earn hundreds of reactions by running a build up, a day of moment, and a recap, each one tagging the people they want in the room.</p>
+      </article>
+      <article class="feature glass">
+        <div class="fico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0"/><path d="M12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7"/></svg></div>
+        <h3>Activate the team</h3>
+        <p>Personal profiles substantially out reach company pages, and anyone who lists the organization as their employer becomes an automatic follower. Only four people had.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= WHAT I LEFT ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow"><span class="dot"></span>📦 What I Left Behind</span>
+      <h2>Six things the team <span class="grad-text">keeps</span></h2>
+      <p>Built so the strategy keeps running after the internship ends.</p>
+    </div>
+
+    <ul class="checks">
+      <li class="glass"><span class="ck"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Presence &amp; Engagement Analysis</b>The full twelve month audit with demographics, benchmarking, and recommendations</span></li>
+      <li class="glass"><span class="ck"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Summary Deck</b>The audit compressed into nine slides for presenting to the board</span></li>
+      <li class="glass"><span class="ck"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Getting on the Corporate Radar</b>An eight tactic growth plan for corporate following and partnerships</span></li>
+      <li class="glass"><span class="ck"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>The Outreach Pipeline</b>45 Westchester businesses matched to a survivor&rsquo;s path to safety, with 25 named contacts</span></li>
+      <li class="glass"><span class="ck"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Profile Copy &amp; Banner Concept</b>A shorter, sharper &ldquo;About&rdquo; section built on the organization&rsquo;s real mark and tagline</span></li>
+      <li class="glass"><span class="ck"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>The LinkedIn Playbook</b>Caption structure, cadence, safety guardrails, and a first thirty days plan</span></li>
+    </ul>
+
+    <div class="board glass">
+      <p style="font-size:15.5px;color:var(--ink-soft);margin-bottom:8px;"><strong style="color:var(--ink);font-weight:600;">And a scoreboard.</strong> Impressions were the least useful number on the dashboard, so I replaced them with five the team can actually move.</p>
+      <div class="brow"><span class="lbl">Comments per post</span><span class="vals"><span class="from">0.64</span><span class="to">3+</span></span></div>
+      <div class="brow"><span class="lbl">Posts receiving any comment</span><span class="vals"><span class="from">15 of 64</span><span class="to">most</span></span></div>
+      <div class="brow"><span class="lbl">Reposts per post</span><span class="vals"><span class="from">low</span><span class="to">3+</span></span></div>
+      <div class="brow"><span class="lbl">New followers per month</span><span class="vals"><span class="from">~15</span><span class="to">30+</span></span></div>
+      <div class="brow"><span class="lbl">Staff listing Hope&rsquo;s Door as employer</span><span class="vals"><span class="from">4</span><span class="to">all</span></span></div>
+      <p class="fineprint">The right hand column is the target set against the measured baseline, not a result claimed. Before this, none of these five were being tracked.</p>
+    </div>
+  </section>
+
+  <!-- ================= LESSONS ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow"><span class="dot"></span>💜 What I Learned</span>
+      <h2>Three things I did not know <span class="grad-text">in June</span></h2>
+    </div>
+
+    <div class="features">
+      <article class="feature glass">
+        <div class="fico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg></div>
+        <h3>Reach is not the goal</h3>
+        <p>A post seen by two thousand people who scroll past does less than one comment from an attorney who now knows where to refer a client.</p>
+      </article>
+      <article class="feature glass">
+        <div class="fico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+        <h3>People beat polish</h3>
+        <p>Every top post had a face, a name, or a moment. Every bottom post was a faceless broadcast. It was never the polished ones that won.</p>
+      </article>
+      <article class="feature glass">
+        <div class="fico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6c0 2.2 1.2 3.5 2 4.5.6.8 1 1.5 1 2.5h6c0-1 .4-1.7 1-2.5.8-1 2-2.3 2-4.5a6 6 0 0 0-6-6Z"/><path d="M9 19h6"/><path d="M10 22h4"/></svg></div>
+        <h3>The best lever is free</h3>
+        <p>Name the people who show up for you. For a small nonprofit competing against pages ten times its size, it is the closest thing to a free lever that exists.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= CLOSE ================= -->
+  <section>
+    <div class="close glass">
+      <p>A heartfelt thank you to <strong>Patti Reyes D&rsquo;Agostino</strong>, <strong>Kim Davis</strong>, and the entire Hope&rsquo;s Door team for welcoming me, trusting my ideas, and giving me room to build. And to <strong>Dr. Pham</strong> for the introduction that made this possible. 💜</p>
+      <p>I am proud to leave behind a system the team can keep building on, for every survivor who finds their way to that door.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- section + item reveal transitions ---------- */
+(function(){
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !('IntersectionObserver' in window)) return;
+
+  var secs = document.querySelectorAll('.page > section');
+
+  /* One signature motion per section. `scope` is null for the hero,
+     otherwise the index of the section the selector belongs to. */
+  var plan = [
+    /* HERO: light coming into focus */
+    {scope:null, sel:'.hero .badge',   cls:'rv-badge'},
+    {scope:null, sel:'.hero h1',       cls:'rv-focusin', delay:140},
+    {scope:null, sel:'.hero .sub',     cls:'rv-focusin', delay:360},
+    {scope:null, sel:'.hero .idcard',  cls:'rv-card',    delay:560},
+
+    /* 0 MISSION: swings open on a hinge */
+    {scope:0, sel:'.sec-head', cls:'rv-door'},
+    {scope:0, sel:'.prose',    cls:'rv-door', delay:340},
+
+    /* 1 PIVOT: settles straight, then the strike is drawn */
+    {scope:1, sel:'.pivot', cls:'rv-settle'},
+
+    /* 2 BASELINE: figures resolve out of blur, in reading order */
+    {scope:2, sel:'.sec-head',   cls:'rv-drop'},
+    {scope:2, sel:'.bento .cell',cls:'rv-resolve', delay:260, step:165},
+
+    /* 3 THE SHIFT: the two models close in from opposite sides */
+    {scope:3, sel:'.sec-head',  cls:'rv-drop'},
+    {scope:3, sel:'.model.old', cls:'rv-left',  delay:200},
+    {scope:3, sel:'.model.new', cls:'rv-right', delay:200},
+    {scope:3, sel:'.arrowbox',  cls:'rv-pop',   delay:1150},
+
+    /* 4 HABITS: cards dealt face up */
+    {scope:4, sel:'.sec-head', cls:'rv-slidein'},
+    {scope:4, sel:'.feature',  cls:'rv-deal', delay:300, step:230},
+
+    /* 5 HANDOVER: rows slide across, checks stamp on, board wipes open */
+    {scope:5, sel:'.sec-head', cls:'rv-slidein'},
+    {scope:5, sel:'.checks li',cls:'rv-row',  delay:230, step:155},
+    {scope:5, sel:'.board',    cls:'rv-quiet'},
+    {scope:5, sel:'.board p',  cls:'rv-quiet', delay:220},
+    {scope:5, sel:'.brow',     cls:'rv-wipe',  delay:400, step:170},
+
+    /* 6 LESSONS: realisations coming clear */
+    {scope:6, sel:'.sec-head', cls:'rv-clear'},
+    {scope:6, sel:'.feature',  cls:'rv-clear', delay:330, step:265},
+
+    /* 7 CLOSE: the slowest, a breath out */
+    {scope:7, sel:'.close', cls:'rv-breathe'}
+  ];
+
+  var items = [];
+
+  plan.forEach(function(p){
+    var host = (p.scope === null) ? document : secs[p.scope];
+    if(!host) return;
+    var nodes = host.querySelectorAll(p.sel);
+    Array.prototype.forEach.call(nodes, function(el, i){
+      if(el.classList.contains('rv')) return;
+      el.classList.add('rv', p.cls);
+      var d = p.delay || 0;
+      if(p.step) d += i * p.step;
+      if(d) el.style.setProperty('--d', d + 'ms');
+      items.push(el);
+    });
+  });
+
+  if(!items.length) return;
+  root.setAttribute('data-rv','on');
+
+  var pending = [];
+  var io = null;
+
+  /* Plays a part's transition exactly once, then locks the finished
+     state so it stays put for the rest of the visit. */
+  function show(el){
+    if(el.classList.contains('in')) return;
+    el.classList.add('in');
+
+    var k = pending.indexOf(el);
+    if(k > -1) pending.splice(k, 1);
+    if(io) io.unobserve(el);
+
+    var hold = (parseFloat(el.style.getPropertyValue('--d')) || 0) + 3200;
+    var lock = function(){
+      el.classList.add('done');
+      el.removeEventListener('transitionend', onEnd);
+    };
+    var onEnd = function(e){
+      if(e.target !== el) return;
+      clearTimeout(el._lockT);
+      el._lockT = setTimeout(lock, 900); /* let child delays finish too */
+    };
+    el.addEventListener('transitionend', onEnd);
+    el._lockT = setTimeout(lock, hold);
+  }
+
+  /* Only the opening screen appears without scrolling, so the first
+     frame is complete. Everything lower waits for the viewer to
+     reach it, and plays the first time they do. */
+  var vh = window.innerHeight || 800;
+  var ready = [];
+  items.forEach(function(el){
+    if(el.getBoundingClientRect().top < vh * 0.72){ ready.push(el); }
+    else { pending.push(el); }
+  });
+
+  io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      /* Fires on arrival, and also catches anything already scrolled
+         past, so a fast scroll can never skip a part. */
+      if(e.isIntersecting || e.boundingClientRect.top < 0) show(e.target);
+    });
+  }, {rootMargin:'0px 0px -24% 0px', threshold:0.3});
+
+  pending.slice().forEach(function(el){ io.observe(el); });
+  ready.forEach(show);
+
+  /* Safety net: sweep on scroll for anything the observer misses. */
+  var ticking = false;
+  function sweep(){
+    ticking = false;
+    var h = window.innerHeight || 800;
+    pending.slice().forEach(function(el){
+      if(el.getBoundingClientRect().top < h * 0.76) show(el);
+    });
+    if(!pending.length){
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    }
+  }
+  function onScroll(){
+    if(!ticking){ ticking = true; requestAnimationFrame(sweep); }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+
+  /* Failsafe: never leave anything hidden. */
+  setTimeout(function(){ items.forEach(show); }, 14000);
+  window.addEventListener('pagehide', function(){ items.forEach(show); });
+})();
+
+/* ---------- drifting candlelight ---------- */
+(function(){
+  var c = document.getElementById('vigil');
+  if(!c || !c.getContext) return;
+  var ctx = c.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W=0,H=0,dpr=1,motes=[],raf=null;
+
+  function read(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  function seed(){
+    var n = Math.max(16, Math.min(28, Math.round(W/56)));
+    motes=[];
+    for(var i=0;i<n;i++){
+      motes.push({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        r:110+Math.random()*220,
+        sp:0.05+Math.random()*0.14,
+        dr:(Math.random()-0.5)*0.10,
+        ph:Math.random()*Math.PI*2,
+        pu:0.0005+Math.random()*0.0009,
+        tone:Math.floor(Math.random()*3)
+      });
+    }
+  }
+
+  function size(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=c.clientWidth; H=c.clientHeight;
+    c.width=Math.round(W*dpr); c.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    seed();
+  }
+
+  function draw(t){
+    var tones=[read('--mote-a')||'rgba(214,158,96,.46)', read('--mote-b')||'rgba(180,102,110,.36)', read('--mote-c')||'rgba(140,96,160,.34)'];
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<motes.length;i++){
+      var m=motes[i];
+      var a=0.66+0.34*Math.sin(m.ph+t*m.pu);
+      var g=ctx.createRadialGradient(m.x,m.y,0,m.x,m.y,m.r);
+      g.addColorStop(0,tones[m.tone]);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.globalAlpha=a;
+      ctx.fillStyle=g;
+      ctx.beginPath();
+      ctx.arc(m.x,m.y,m.r,0,Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  }
+
+  function step(t){
+    for(var i=0;i<motes.length;i++){
+      var m=motes[i];
+      m.y-=m.sp;
+      m.x+=m.dr+Math.sin((t*0.00009)+m.ph)*0.12;
+      if(m.y+m.r<0){ m.y=H+m.r; m.x=Math.random()*W; }
+      if(m.x<-m.r) m.x=W+m.r;
+      if(m.x>W+m.r) m.x=-m.r;
+    }
+    draw(t);
+    raf=requestAnimationFrame(step);
+  }
+
+  size();
+  if(reduce){ draw(0); } else { raf=requestAnimationFrame(step); }
+
+  var rt;
+  window.addEventListener('resize',function(){
+    clearTimeout(rt);
+    rt=setTimeout(function(){ size(); if(reduce) draw(0); },180);
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(reduce) return;
+    if(document.hidden){ if(raf) cancelAnimationFrame(raf); raf=null; }
+    else if(!raf){ raf=requestAnimationFrame(step); }
+  });
+})();
+</script>
