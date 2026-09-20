@@ -62,6 +62,49 @@ is a reasonable order.
 
 ---
 
+## ⚠️ The one rule that decides whether deploying works
+
+**`index.html` must sit at the top level of your repository, not inside a
+folder.**
+
+This is the single most common reason a deploy returns "page doesn't exist".
+Hosts look for `index.html` at the root. If your repository looks like the
+left-hand column below, every host will return a 404:
+
+```
+✗ WRONG                              ✓ RIGHT
+your-repo/                           your-repo/
+└── hopes-door-portfolio/            ├── index.html
+    ├── index.html                   ├── favicon.svg
+    ├── favicon.svg                  ├── og-image.png
+    └── ...                          └── ...
+```
+
+Check yours by opening the repository on github.com. **If the first thing you
+see is a folder rather than `index.html`, that is the problem.**
+
+### Two ways to fix it
+
+**A. Move the files up (recommended).** In your local repo:
+
+```bash
+git mv hopes-door-portfolio/* .
+git mv hopes-door-portfolio/.nojekyll .
+git mv hopes-door-portfolio/.github .
+rmdir hopes-door-portfolio
+git add -A
+git commit -m "Move site to repository root"
+git push
+```
+
+Vercel redeploys on its own within about a minute.
+
+**B. Or tell Vercel where to look.** In your Vercel project: **Settings →
+General → Root Directory → Edit**, enter `hopes-door-portfolio`, save, then
+**Deployments → ⋯ → Redeploy**.
+
+---
+
 ## Deploy
 
 Pick one. All four are free for a page this size.
@@ -99,11 +142,30 @@ npm run deploy:netlify
 
 ### Option 3 · Vercel
 
+From the terminal, inside the folder that contains `index.html`:
+
 ```bash
-npm run deploy:vercel
+npx --yes vercel --prod
 ```
 
-Answer the prompts, accepting the defaults. It detects a static site on its own.
+Answer the prompts. When it asks **"In which directory is your code located?"**
+the answer is `./`. When it asks about build settings, say **no** to overriding
+them. The included `vercel.json` already tells Vercel this is a plain static
+site with no build step, so accept the defaults.
+
+If you connected the GitHub repository through the Vercel dashboard instead and
+got a 404, it is almost certainly the folder-nesting problem described at the
+top of this file. Check these three settings under **Settings → General**:
+
+| Setting | Should be |
+| --- | --- |
+| Framework Preset | **Other** |
+| Root Directory | `./` (or your subfolder, if you kept one) |
+| Build Command | empty, or override turned off |
+| Output Directory | `.` |
+
+After changing any of them, go to **Deployments → ⋯ → Redeploy**. Settings
+changes do not republish on their own.
 
 ### Option 4 · Cloudflare Pages
 
@@ -172,6 +234,40 @@ each with a comment naming what it does.
 
 ---
 
+## If the deployed site still will not load
+
+Work down this list in order. The first two cover almost every case.
+
+**1. Is `index.html` at the root of the repository?**
+Open the repo on github.com. You should see `index.html` in the file list
+immediately, not a folder. If you see a folder, apply fix A or B at the top of
+this file.
+
+**2. Did the deploy actually finish?**
+In Vercel, open **Deployments**. The newest one should say **Ready**. If it says
+**Error**, click it and read the build log. If it says **Building** for more
+than a couple of minutes, something is trying to run a build that does not
+exist, which the included `vercel.json` prevents.
+
+**3. Are you opening the right address?**
+Vercel gives several. Use the one on the project overview marked as the
+production domain. A preview address from an older commit can still 404 while
+production is fine.
+
+**4. Is the file named exactly `index.html`?**
+Lowercase, no spaces, no `.txt` on the end. `Index.html` or `index.html.txt`
+will 404. Some computers hide the real extension, so check on github.com rather
+than in your file browser.
+
+**5. Try the fastest possible sanity check.**
+Go to <https://app.netlify.com/drop> and drag in the folder containing
+`index.html`. It is live in about ten seconds with no configuration at all. If
+it works there, the page is fine and the problem is a Vercel setting. If it
+fails there too, the files did not upload correctly, so unzip a fresh copy and
+try again.
+
+---
+
 ## Notes
 
 - The only thing loaded from outside the folder is the Inter typeface from
@@ -182,7 +278,3 @@ each with a comment naming what it does.
   with no animation at all.
 - Nothing is tracked and no data is collected. There are no cookies, no
   analytics and no third-party scripts.
-    else if(!raf){ raf=requestAnimationFrame(step); }
-  });
-})();
-</script>
